@@ -1,4 +1,4 @@
-# Fopina Tap
+# fopina Tap
 
 ## How do I install these formulae?
 `brew install fopina/tap/<formula>`

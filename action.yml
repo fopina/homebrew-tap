@@ -1,0 +1,57 @@
+name: 'Bump Formula'
+description: 'Update formula in your own homebrew tap (commit directly to main branch'
+inputs:
+  tap_repo:
+    description: 'Github repository of the homebrew tap (org/repo)'
+    required: false
+    default: fopina/homebrew-tap
+  tap_branch:
+    description: 'Branch to use'
+    required: false
+    default: main
+  token:
+    description: 'Personal token that allows commits to tap-repo'
+    required: true
+    default: ''
+  formula_class:
+    description: Class name of the formula (usually filename in CamelCase)
+    required: true
+    default: ''
+  formula_file:
+    description: Filename of the formula without extension ("my-formula" means Formula/my-formula.rb)
+    required: true
+    default: ''
+  description:
+    description: Formula property - description
+    required: true
+    default: ''
+  homepage:
+    description: Formula property - homepage (defaults to github repository)
+    required: false
+    default: ''
+  url:
+    description: Formula property - url
+    required: true
+    default: ''
+  license:
+    description: Formula property - license
+    required: false
+    default: ''
+  version:
+    description: Formula property - version
+    required: true
+    default: ''
+  bin:
+    description: Executable file name installed (in the install section)
+    required: true
+    default: ''
+  release:
+    description: Local tarball/artifact to calculate checksum
+    required: true
+    default: ''
+outputs:
+  time: # id of output
+    description: 'The time we greeted you'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

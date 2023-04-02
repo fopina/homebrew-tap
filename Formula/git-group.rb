@@ -1,16 +1,17 @@
 class GitGroup < Formula
   desc "Easily clone all the repositories from a group or organization"
   homepage "https://github.com/fopina/git-group"
-  url "https://github.com/fopina/git-group/releases/download/v0.0.9/git-group_0.0.9_darwin_amd64.tar.gz"
-  version "0.0.9"
-  sha256 "6b52fb9c1e1198c41a96c8ee3b63f71f94d5645a37e36f97cf41967e0b2508e4"
+  url "https://github.com/fopina/git-group/archive/refs/tags/v0.1.0.tar.gz"
+  sha256 "a858d0c2a1308ff58acc730e6ff75ff18226640d8a9b3060970dd2420633f550"
   license "MIT"
 
+  depends_on "go" => :build
+
   def install
-    bin.install "git-group"
+    system "go", "build", *std_go_args(ldflags: "-s -w -X github.com/fopina/git-group/command.version=#{version}")
   end
 
   test do
-    assert_match "0.0.9", shell_output("#{bin}/git-group -v 2>&1")
+    assert_match "0.1.0", shell_output("#{bin}/git-group -v 2>&1")
   end
 end

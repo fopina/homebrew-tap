@@ -1,5 +1,5 @@
 class GitGroup < Formula
-  desc "Easily clone Xall the repositories from a group or organization"
+  desc "Easily clone all the repositories from a group or organization"
   homepage "https://github.com/fopina/git-group"
   url "https://github.com/fopina/git-group/archive/refs/tags/v0.1.0.tar.gz"
   sha256 "a858d0c2a1308ff58acc730e6ff75ff18226640d8a9b3060970dd2420633f550"

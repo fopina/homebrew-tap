@@ -1,8 +1,6 @@
 class Pbin < Formula
   desc "CLI for PrivateBin allowing easy pasting from the Terminal"
   homepage "https://github.com/fopina/privatebin"
-  version "1.0.0"
-
   if OS.mac? && Hardware::CPU.intel?
     url "https://github.com/fopina/privatebin/releases/download/v1.0.0/pbin_darwin_amd64.tar.gz"
     sha256 "32984644fd51550dfed4aa3be4e961190d1b8138a7599c39e1e0fb6d7fa2776d"

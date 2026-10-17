@@ -58,7 +58,7 @@ async function sha256(url) {
 function formula(inputs, repository, assets) {
   const homepage = inputs.homepage || `https://github.com/${repository}`;
   const installBody = inputs.install.trim() ||
-    `binary = Dir[${rubyString(`${inputs.bin}_*`)}].first\nif binary\n  bin.install binary => ${rubyString(inputs.bin)}\nelse\n  bin.install ${rubyString(inputs.bin)}\nend`;
+    `binary = Dir[${rubyString(`${inputs.bin}*`)}].first\nif binary\n  bin.install binary => ${rubyString(inputs.bin)}\nelse\n  bin.install ${rubyString(inputs.bin)}\nend`;
   const testBody = inputs.test.trim() || `assert_predicate bin/${rubyString(inputs.bin)}, :executable?`;
   const indentedInstall = installBody.split(/\r?\n/).map((line) => `    ${line}`).join('\n');
   const indentedTest = testBody.split(/\r?\n/).map((line) => `    ${line}`).join('\n');

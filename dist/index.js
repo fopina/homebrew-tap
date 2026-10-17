@@ -17,6 +17,14 @@ module.exports = require("node:fs");
 
 /***/ }),
 
+/***/ 760:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:path");
+
+/***/ }),
+
 /***/ 120:
 /***/ ((module) => {
 
@@ -4265,7 +4273,8 @@ const dist_src_Octokit = Octokit.plugin(requestLog, legacyRestEndpointMethods, p
 /************************************************************************/
 var __webpack_exports__ = {};
 const { createHash } = __nccwpck_require__(598);
-const { appendFileSync } = __nccwpck_require__(24);
+const { appendFileSync, readFileSync } = __nccwpck_require__(24);
+const { join } = __nccwpck_require__(760);
 const { Octokit } = __nccwpck_require__(380);
 
 const API_VERSION = '2022-11-28';
@@ -4338,40 +4347,29 @@ function formula(inputs, repository, assets) {
   const homepage = inputs.homepage || `https://github.com/${repository}`;
   const testBody = inputs.test || `assert_predicate bin/${rubyString(inputs.bin)}, :executable?`;
   const indentedTest = testBody.split(/\r?\n/).map((line) => `    ${line}`).join('\n');
-  return `class ${inputs.formulaClass} < Formula
-  desc ${rubyString(inputs.description)}
-  homepage ${rubyString(homepage)}
-  license ${rubyString(inputs.license)}
-
-  if OS.mac? && Hardware::CPU.intel?
-    url ${rubyString(assets.macos_amd64.url)}
-    sha256 ${rubyString(assets.macos_amd64.sha256)}
-  end
-
-  if OS.mac? && Hardware::CPU.arm?
-    url ${rubyString(assets.macos_arm64.url)}
-    sha256 ${rubyString(assets.macos_arm64.sha256)}
-  end
-
-  if OS.linux? && Hardware::CPU.intel?
-    url ${rubyString(assets.linux_amd64.url)}
-    sha256 ${rubyString(assets.linux_amd64.sha256)}
-  end
-
-  if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url ${rubyString(assets.linux_arm64.url)}
-    sha256 ${rubyString(assets.linux_arm64.sha256)}
-  end
-
-  def install
-    bin.install ${rubyString(inputs.bin)}
-  end
-
-  test do
-${indentedTest}
-  end
-end
-`;
+  const values = {
+    FORMULA_CLASS: inputs.formulaClass,
+    DESCRIPTION: rubyString(inputs.description),
+    HOMEPAGE: rubyString(homepage),
+    LICENSE: rubyString(inputs.license),
+    MACOS_AMD64_URL: rubyString(assets.macos_amd64.url),
+    MACOS_AMD64_SHA256: rubyString(assets.macos_amd64.sha256),
+    MACOS_ARM64_URL: rubyString(assets.macos_arm64.url),
+    MACOS_ARM64_SHA256: rubyString(assets.macos_arm64.sha256),
+    LINUX_AMD64_URL: rubyString(assets.linux_amd64.url),
+    LINUX_AMD64_SHA256: rubyString(assets.linux_amd64.sha256),
+    LINUX_ARM64_URL: rubyString(assets.linux_arm64.url),
+    LINUX_ARM64_SHA256: rubyString(assets.linux_arm64.sha256),
+    BIN: rubyString(inputs.bin),
+    FORMULA_TEST: indentedTest,
+  };
+  const template = readFileSync(join(__dirname, '..', 'formula.rb.tpl'), 'utf8');
+  const rendered = template.replace(/\{\{([A-Z0-9_]+)\}\}/g, (placeholder, name) => {
+    if (!(name in values)) throw new Error(`Unknown formula template placeholder: ${placeholder}`);
+    return values[name];
+  });
+  if (/\{\{[A-Z0-9_]+\}\}/.test(rendered)) throw new Error('Formula template contains an unreplaced placeholder');
+  return rendered;
 }
 
 async function updateFormula(inputs, client, formulaPath, content) {

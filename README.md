@@ -86,4 +86,4 @@ The custom test replaces the default executable check. It is Ruby code and is in
 
 ## Development
 
-This is a Node.js 24 action. Its Octokit dependency is bundled in `dist/index.js`, so consumers do not need to install packages. After changing `index.js`, run `npm install` and `npm run build`, then commit the updated `dist/index.js` and `dist/licenses.txt` with the source change.
+This is a Node.js 24 action. Its Octokit dependency is bundled in `dist/index.js`, so consumers do not need to install packages. The formula source lives in `formula.rb.tpl`; the action loads it at runtime and replaces the named placeholders. After changing `index.js`, run `npm install` and `npm run build`, then commit the updated `dist/index.js` and `dist/licenses.txt` with the source change.

@@ -71,7 +71,7 @@ async function sha256(url) {
 
 function formula(inputs, repository, assets) {
   const homepage = inputs.homepage || `https://github.com/${repository}`;
-  const testBody = inputs.test || `assert_predicate bin/${rubyString(inputs.bin)}, :executable?`;
+  const testBody = inputs.test.trim() || `assert_predicate bin/${rubyString(inputs.bin)}, :executable?`;
   const indentedTest = testBody.split(/\r?\n/).map((line) => `    ${line}`).join('\n');
   const values = {
     FORMULA_CLASS: inputs.formulaClass,

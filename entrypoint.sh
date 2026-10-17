@@ -95,7 +95,6 @@ LINUX_AMD64_SHA256="$(download_and_hash "${linux_amd64}" linux_amd64)"
 LINUX_ARM64_URL="$(jq -r '.browser_download_url' <<<"${linux_arm64}")"
 LINUX_ARM64_SHA256="$(download_and_hash "${linux_arm64}" linux_arm64)"
 
-export INPUT_FORMULA_VERSION="${formula_version}"
 export MACOS_AMD64_URL MACOS_AMD64_SHA256
 export MACOS_ARM64_URL MACOS_ARM64_SHA256
 export LINUX_AMD64_URL LINUX_AMD64_SHA256

@@ -83,3 +83,7 @@ The formula's `test do` block defaults to a generic check that the installed exe
 ```
 
 The custom test replaces the default executable check. It is Ruby code and is inserted into the formula's `test do` block.
+
+## Development
+
+This is a Node.js 24 action. Its Octokit dependency is bundled in `dist/index.js`, so consumers do not need to install packages. After changing `index.js`, run `npm install` and `npm run build`, then commit the updated `dist/index.js` and `dist/licenses.txt` with the source change.

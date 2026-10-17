@@ -1,27 +1,27 @@
 class Pbin < Formula
   desc "CLI for PrivateBin allowing easy pasting from the Terminal"
   homepage "https://github.com/fopina/privatebin"
+  license "MIT"
+
   if OS.mac? && Hardware::CPU.intel?
-    url "https://github.com/fopina/privatebin/releases/download/v1.0.0/pbin_darwin_amd64.tar.gz"
-    sha256 "32984644fd51550dfed4aa3be4e961190d1b8138a7599c39e1e0fb6d7fa2776d"
+    url "https://github.com/fopina/privatebin/releases/download/v1.0.6/pbin_darwin_amd64.tar.gz"
+    sha256 "26f30cb12e80e34e22069bf53f8e674c5070b77817b993628218c583681913a1"
   end
 
   if OS.mac? && Hardware::CPU.arm?
-    url "https://github.com/fopina/privatebin/releases/download/v1.0.0/pbin_darwin_arm64.tar.gz"
-    sha256 "20266dbccd9d5bce3f394e0f2f607ff48b2ed55cdc3612d9025ddabaafab7b9f"
+    url "https://github.com/fopina/privatebin/releases/download/v1.0.6/pbin_darwin_arm64.tar.gz"
+    sha256 "49d867650c794778d7284891ee77dee5a26e02a20e4e803c9a0d98a59fba221d"
   end
 
   if OS.linux? && Hardware::CPU.intel?
-    url "https://github.com/fopina/privatebin/releases/download/v1.0.0/pbin_linux_amd64.tar.gz"
-    sha256 "9dbd92cc74a580a6ee7bb1577cadb0c6a6461774ae8387e0e6782a7e01d53838"
+    url "https://github.com/fopina/privatebin/releases/download/v1.0.6/pbin_linux_amd64.tar.gz"
+    sha256 "bf4ca090869574457ce950890e63588903ca8e8e975970a56fd4c83508e8b96e"
   end
 
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url "https://github.com/fopina/privatebin/releases/download/v1.0.0/pbin_linux_arm64.tar.gz"
-    sha256 "725cc36d0ae62de9fac4b0e831a50c010a59524605b0cd1ca7356bb3ab3438f6"
+    url "https://github.com/fopina/privatebin/releases/download/v1.0.6/pbin_linux_arm64.tar.gz"
+    sha256 "5955f172206af54dd550160164a469daa6b9d9dfd79f0b7f00d95ede72084a31"
   end
-
-  license "MIT"
 
   def install
     bin.install "pbin"

@@ -4,7 +4,8 @@
   "private": true,
   "description": "GitHub Action for updating Homebrew formulae",
   "scripts": {
-    "build": "ncc build index.js --license licenses.txt -o dist"
+    "build": "ncc build index.js --license licenses.txt -o dist",
+    "test": "node --test"
   },
   "dependencies": {
     "@octokit/rest": "^21.1.1"

@@ -88,7 +88,7 @@ The formula's `test do` block defaults to a generic check that the installed exe
 
 The custom test replaces the default executable check. It is Ruby code and is inserted into the formula's `test do` block.
 
-The formula's `install` method defaults to `bin.install` with the executable name from `bin`. If the downloaded or extracted executable has a different filename, provide a multiline `install` input with the Ruby body to install and rename it. For example, versioned release binaries can be matched and installed under the stable command name:
+The formula's `install` method automatically finds either the executable name from `bin` or a versioned filename beginning with that name and an underscore, then installs it under the stable command name. This supports extensionless release binaries such as `speedtest-cli_2.1.5_linux_amd64`. If an archive has a different layout or naming pattern, provide a multiline `install` input with the Ruby body to install and rename it:
 
 ```yaml
     install: |
@@ -97,7 +97,7 @@ The formula's `install` method defaults to `bin.install` with the executable nam
       bin.install binary => "speedtest-cli"
 ```
 
-The custom install replaces the default install command. It is Ruby code inserted into the formula's `def install` method.
+The custom install replaces this automatic behavior. It is Ruby code inserted into the formula's `def install` method.
 
 ## Development
 

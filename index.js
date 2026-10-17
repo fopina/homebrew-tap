@@ -120,6 +120,14 @@ async function updateFormula(inputs, client, formulaPath, content) {
     } catch (error) {
       if (!error.message.includes('(404)')) throw error;
     }
+  } else {
+    try {
+      existingFile = await github(client, 'GET', '/repos/{owner}/{repo}/contents/{path}', { ...repository, path: formulaPath, ref: inputs.tapBranch });
+      const current = Buffer.from(existingFile.content.replace(/\s/g, ''), 'base64').toString('utf8');
+      if (current === content) return { pullRequest: { url: '' }, status: 'already up to date' };
+    } catch (error) {
+      if (!error.message.includes('(404)')) throw error;
+    }
   }
 
   if (!branchSha) {

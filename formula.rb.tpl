@@ -26,4 +26,8 @@ class {{ "INPUT_FORMULA_CLASS" | env }} < Formula
   def install
     bin.install "{{ "INPUT_BIN" | env }}"
   end
+
+  test do
+    assert_predicate bin/"{{ "INPUT_BIN" | env }}", :executable?
+  end
 end

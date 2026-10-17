@@ -13,28 +13,17 @@ All four archives are required. If an asset is missing or more than one asset ma
 
 ## Usage
 
-Add a release workflow to the CLI repository:
+Add the action as the final step of the existing release workflow, after the step or job that uploads the release archives. In this setup, the workflow may still start from `release: [published]`; the formula bump waits until the earlier upload step has completed.
 
 ```yaml
-name: Update Homebrew formula
-
-on:
-  release:
-    types: [published]
-
-permissions:
-  contents: read
-
-jobs:
-  bump-formula:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Update tap formula
-        uses: fopina/homebrew-tap@bump-action
-        with:
-          version: ${{ github.event.release.tag_name }}
-          token: ${{ secrets.TAP_TOKEN }}
+- name: Update Homebrew formula
+  uses: fopina/homebrew-tap@bump-action
+  with:
+    version: ${{ github.event.release.tag_name }}
+    token: ${{ secrets.TAP_TOKEN }}
 ```
+
+If the release workflow is triggered by a tag push instead, pass `${{ github.ref_name }}` as `version`. If asset uploads happen in a separate job, put this action in a job that `needs` the upload job.
 
 The `version` is the only release value the caller needs to provide. The token is still required because the action writes to a different repository. This version commits directly to the configured tap branch; it does not open a pull request.
 

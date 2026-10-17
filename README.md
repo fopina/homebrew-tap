@@ -88,6 +88,17 @@ The formula's `test do` block defaults to a generic check that the installed exe
 
 The custom test replaces the default executable check. It is Ruby code and is inserted into the formula's `test do` block.
 
+The formula's `install` method automatically finds a filename beginning with the name from `bin` and installs it under that stable command name. This supports extensionless release binaries such as `speedtest-cli_2.1.5_linux_amd64`. If no matching binary is found, it installs the executable named by `bin`, as expected for extracted archives. If an archive has a different layout or naming pattern, provide a multiline `install` input with the Ruby body to install it:
+
+```yaml
+    install: |
+      binary = Dir["speedtest-cli_*"].first
+      raise "Could not find speedtest-cli binary" unless binary
+      bin.install binary => "speedtest-cli"
+```
+
+The custom install replaces this automatic behavior. It is Ruby code inserted into the formula's `def install` method.
+
 ## Development
 
 This is a Node.js 24 action. Its Octokit dependency is bundled in `dist/index.js`, so consumers do not need to install packages. The formula source lives in `formula.rb.tpl`; the action loads it at runtime and replaces the named placeholders. After changing `index.js`, run `npm install` and `npm run build`, then commit the updated `dist/index.js` and `dist/licenses.txt` with the source change.

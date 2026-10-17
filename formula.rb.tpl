@@ -24,7 +24,7 @@ class {{FORMULA_CLASS}} < Formula
   end
 
   def install
-    bin.install {{BIN}}
+{{FORMULA_INSTALL}}
   end
 
   test do

@@ -45,5 +45,5 @@ outputs:
   pull_request:
     description: 'URL of the created or updated pull request'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: 'node24'
+  main: 'dist/index.js'

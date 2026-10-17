@@ -1,0 +1,15 @@
+{
+  "name": "homebrew-tap-bump-action",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GitHub Action for updating Homebrew formulae",
+  "scripts": {
+    "build": "ncc build index.js --license licenses.txt -o dist"
+  },
+  "dependencies": {
+    "@octokit/rest": "^21.1.1"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.38.3"
+  }
+}

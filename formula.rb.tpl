@@ -1,33 +1,33 @@
-class {{ "INPUT_FORMULA_CLASS" | env }} < Formula
-  desc "{{ "INPUT_DESCRIPTION" | env }}"
-  homepage "{{ if ne ("INPUT_HOMEPAGE"|env) "" }}{{ "INPUT_HOMEPAGE" | env }}{{ else }}https://github.com/{{ "GITHUB_REPOSITORY" | env }}{{ end }}"
-  license "{{ "INPUT_LICENSE" | env }}"
+class {{FORMULA_CLASS}} < Formula
+  desc {{DESCRIPTION}}
+  homepage {{HOMEPAGE}}
+  license {{LICENSE}}
 
   if OS.mac? && Hardware::CPU.intel?
-    url "{{ "MACOS_AMD64_URL" | env }}"
-    sha256 "{{ "MACOS_AMD64_SHA256" | env }}"
+    url {{MACOS_AMD64_URL}}
+    sha256 {{MACOS_AMD64_SHA256}}
   end
 
   if OS.mac? && Hardware::CPU.arm?
-    url "{{ "MACOS_ARM64_URL" | env }}"
-    sha256 "{{ "MACOS_ARM64_SHA256" | env }}"
+    url {{MACOS_ARM64_URL}}
+    sha256 {{MACOS_ARM64_SHA256}}
   end
 
   if OS.linux? && Hardware::CPU.intel?
-    url "{{ "LINUX_AMD64_URL" | env }}"
-    sha256 "{{ "LINUX_AMD64_SHA256" | env }}"
+    url {{LINUX_AMD64_URL}}
+    sha256 {{LINUX_AMD64_SHA256}}
   end
 
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url "{{ "LINUX_ARM64_URL" | env }}"
-    sha256 "{{ "LINUX_ARM64_SHA256" | env }}"
+    url {{LINUX_ARM64_URL}}
+    sha256 {{LINUX_ARM64_SHA256}}
   end
 
   def install
-    bin.install "{{ "INPUT_BIN" | env }}"
+    bin.install {{BIN}}
   end
 
   test do
-{{ "INPUT_FORMULA_TEST" | env }}
+{{FORMULA_TEST}}
   end
 end

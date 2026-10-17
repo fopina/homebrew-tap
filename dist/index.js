@@ -4354,7 +4354,9 @@ async function sha256(url) {
 
 function formula(inputs, repository, assets) {
   const homepage = inputs.homepage || `https://github.com/${repository}`;
+  const installBody = inputs.install.trim() || `bin.install ${rubyString(inputs.bin)}`;
   const testBody = inputs.test.trim() || `assert_predicate bin/${rubyString(inputs.bin)}, :executable?`;
+  const indentedInstall = installBody.split(/\r?\n/).map((line) => `    ${line}`).join('\n');
   const indentedTest = testBody.split(/\r?\n/).map((line) => `    ${line}`).join('\n');
   const values = {
     FORMULA_CLASS: inputs.formulaClass,
@@ -4369,7 +4371,7 @@ function formula(inputs, repository, assets) {
     LINUX_AMD64_SHA256: rubyString(assets.linux_amd64.sha256),
     LINUX_ARM64_URL: rubyString(assets.linux_arm64.url),
     LINUX_ARM64_SHA256: rubyString(assets.linux_arm64.sha256),
-    BIN: rubyString(inputs.bin),
+    FORMULA_INSTALL: indentedInstall,
     FORMULA_TEST: indentedTest,
   };
   const template = readFileSync(join(__dirname, '..', 'formula.rb.tpl'), 'utf8');
@@ -4458,6 +4460,7 @@ async function run() {
     homepage: input('homepage'),
     license: input('license', { fallback: 'MIT' }),
     bin: input('bin', { required: true }),
+    install: input('install'),
     test: input('test'),
     tapRepo: input('tap_repo', { fallback: 'fopina/homebrew-tap' }),
     tapBranch: input('tap_branch', { fallback: 'main' }),

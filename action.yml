@@ -35,6 +35,10 @@ inputs:
   bin:
     description: 'Installed executable name and release asset prefix'
     required: true
+  install:
+    description: 'Optional Ruby body for the formula install method (defaults to installing bin)'
+    required: false
+    default: ''
   test:
     description: 'Optional Ruby body for the Homebrew test do block (defaults to an executable check)'
     required: false

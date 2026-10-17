@@ -39,6 +39,10 @@ inputs:
     description: 'Executable name and release asset prefix'
     required: false
     default: pbin
+  test:
+    description: 'Optional Ruby body for the Homebrew test do block (defaults to an executable check)'
+    required: false
+    default: ''
 outputs:
   assets:
     description: 'JSON map of the matched release assets'

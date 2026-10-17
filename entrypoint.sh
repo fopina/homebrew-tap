@@ -100,6 +100,12 @@ export MACOS_ARM64_URL MACOS_ARM64_SHA256
 export LINUX_AMD64_URL LINUX_AMD64_SHA256
 export LINUX_ARM64_URL LINUX_ARM64_SHA256
 
+formula_test="${INPUT_TEST:-}"
+if [[ -z "${formula_test}" ]]; then
+  formula_test="assert_predicate bin/\"${INPUT_BIN}\", :executable?"
+fi
+export INPUT_FORMULA_TEST="$(printf '%s' "${formula_test}" | sed 's/^/    /')"
+
 tap_dir="${work_dir}/tap"
 auth_header="AUTHORIZATION: basic $(printf 'x-access-token:%s' "${INPUT_TOKEN}" | base64 | tr -d '\n')"
 git -c "http.extraheader=${auth_header}" clone --depth=1 -b "${INPUT_TAP_BRANCH}" \

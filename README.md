@@ -57,3 +57,17 @@ Create a fine-grained personal access token for the action:
 The workflow passes that secret as the action's `token` input. The source repository's `GITHUB_TOKEN` cannot write to the separate tap repository. Do not put the token directly in the workflow file.
 
 Defaults target `fopina/homebrew-tap` on `main`, updating `Formula/pbin.rb`. The formula class, filename, description, homepage, license, executable name, tap repository, and tap branch can be customized through the action inputs.
+
+The formula's `test do` block defaults to a generic check that the installed executable exists and is executable. To provide formula-specific Ruby test code, pass a multiline `test` input containing the body of the block. For example, `pbin` can check the reported release version:
+
+```yaml
+- name: Update Homebrew formula
+  uses: fopina/homebrew-tap@bump-action
+  with:
+    version: ${{ github.event.release.tag_name }}
+    token: ${{ secrets.TAP_TOKEN }}
+    test: |
+      assert_match "Version: #{version}", shell_output("#{bin}/pbin -v")
+```
+
+The custom test replaces the default executable check. It is Ruby code and is inserted into the formula's `test do` block.

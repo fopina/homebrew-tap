@@ -28,6 +28,6 @@ class {{ "INPUT_FORMULA_CLASS" | env }} < Formula
   end
 
   test do
-    assert_predicate bin/"{{ "INPUT_BIN" | env }}", :executable?
+{{ "INPUT_FORMULA_TEST" | env }}
   end
 end

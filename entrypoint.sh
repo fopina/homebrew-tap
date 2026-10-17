@@ -115,6 +115,7 @@ git add "Formula/${INPUT_FORMULA_FILE}.rb"
 if git diff --cached --quiet; then
   echo "Formula ${INPUT_FORMULA_FILE} is already up to date for ${formula_version}."
   pull_request_url=""
+  pull_request_status="already up to date"
 else
   git commit -m "${INPUT_FORMULA_FILE} ${formula_version}"
 
@@ -139,6 +140,7 @@ else
 
   pull_request_url="$(jq -r '.[0].html_url // empty' "${pull_list}")"
   if [[ -n "${pull_request_url}" ]]; then
+    pull_request_status="updated"
     echo "Updated existing pull request: ${pull_request_url}"
   else
     pull_request_payload="$(jq -cn \
@@ -156,8 +158,21 @@ else
       "https://api.github.com/repos/${INPUT_TAP_REPO}/pulls" \
       --output "${pull_response}"
     pull_request_url="$(jq -er '.html_url' "${pull_response}")"
+    pull_request_status="created"
     echo "Created pull request: ${pull_request_url}"
   fi
+fi
+
+if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
+  {
+    echo "## Homebrew tap update"
+    echo
+    if [[ -n "${pull_request_url}" ]]; then
+      echo "${pull_request_status^} pull request: [${INPUT_TAP_REPO}](${pull_request_url})"
+    else
+      echo "Formula \`${INPUT_FORMULA_FILE}\` is already up to date for \`${formula_version}\`."
+    fi
+  } >> "${GITHUB_STEP_SUMMARY}"
 fi
 
 if [[ -n "${GITHUB_OUTPUT:-}" ]]; then

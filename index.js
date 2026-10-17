@@ -2,6 +2,7 @@ const { createHash } = require('node:crypto');
 const { appendFileSync, readFileSync } = require('node:fs');
 const { join } = require('node:path');
 const { Octokit } = require('@octokit/rest');
+const { findAsset } = require('./asset-matcher');
 
 const API_VERSION = '2022-11-28';
 const USER_AGENT = 'homebrew-tap-bump-action';
@@ -44,21 +45,6 @@ function validateInputs(inputs, repository) {
   if (!/^[^/]+\/[^/]+$/.test(inputs.tapRepo)) {
     throw new Error('tap_repo must be in org/repo format');
   }
-}
-
-function findAsset(assets, bin, platform, architecture, label) {
-  const prefix = `${bin.toLowerCase()}_`;
-  const matches = assets.filter(({ name }) => {
-    const normalized = name.toLowerCase();
-    return normalized.startsWith(prefix) && platform.test(normalized) && architecture.test(normalized) &&
-      /\.(tar\.gz|tgz|zip)$/.test(normalized);
-  });
-  if (matches.length !== 1) {
-    const candidates = matches.map(({ name }) => `  ${name}`).join('\n') || '  (none)';
-    const allAssets = assets.map(({ name }) => `  ${name}`).join('\n') || '  (none)';
-    throw new Error(`Expected exactly one ${label} release archive; found ${matches.length}. Matching candidates:\n${candidates}\nAll release assets:\n${allAssets}`);
-  }
-  return matches[0];
 }
 
 async function sha256(url) {

@@ -1,6 +1,29 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 479:
+/***/ ((module) => {
+
+function findAsset(assets, bin, platform, architecture, label) {
+  const prefix = `${bin.toLowerCase()}_`;
+  const matches = assets.filter(({ name }) => {
+    const normalized = name.toLowerCase();
+    return normalized.startsWith(prefix) && platform.test(normalized) && architecture.test(normalized) &&
+      /(\.(tar\.gz|tgz|zip))?$/.test(normalized);
+  });
+  if (matches.length !== 1) {
+    const candidates = matches.map(({ name }) => `  ${name}`).join('\n') || '  (none)';
+    const allAssets = assets.map(({ name }) => `  ${name}`).join('\n') || '  (none)';
+    throw new Error(`Expected exactly one ${label} release archive; found ${matches.length}. Matching candidates:\n${candidates}\nAll release assets:\n${allAssets}`);
+  }
+  return matches[0];
+}
+
+module.exports = { findAsset };
+
+
+/***/ }),
+
 /***/ 598:
 /***/ ((module) => {
 
@@ -4276,6 +4299,7 @@ const { createHash } = __nccwpck_require__(598);
 const { appendFileSync, readFileSync } = __nccwpck_require__(24);
 const { join } = __nccwpck_require__(760);
 const { Octokit } = __nccwpck_require__(380);
+const { findAsset } = __nccwpck_require__(479);
 
 const API_VERSION = '2022-11-28';
 const USER_AGENT = 'homebrew-tap-bump-action';
@@ -4318,21 +4342,6 @@ function validateInputs(inputs, repository) {
   if (!/^[^/]+\/[^/]+$/.test(inputs.tapRepo)) {
     throw new Error('tap_repo must be in org/repo format');
   }
-}
-
-function findAsset(assets, bin, platform, architecture, label) {
-  const prefix = `${bin.toLowerCase()}_`;
-  const matches = assets.filter(({ name }) => {
-    const normalized = name.toLowerCase();
-    return normalized.startsWith(prefix) && platform.test(normalized) && architecture.test(normalized) &&
-      /\.(tar\.gz|tgz|zip)$/.test(normalized);
-  });
-  if (matches.length !== 1) {
-    const candidates = matches.map(({ name }) => `  ${name}`).join('\n') || '  (none)';
-    const allAssets = assets.map(({ name }) => `  ${name}`).join('\n') || '  (none)';
-    throw new Error(`Expected exactly one ${label} release archive; found ${matches.length}. Matching candidates:\n${candidates}\nAll release assets:\n${allAssets}`);
-  }
-  return matches[0];
 }
 
 async function sha256(url) {

@@ -1,6 +1,6 @@
-FROM alpine:3.12
+FROM alpine:3.24
 
-RUN apk add --no-cache git
+RUN apk add --no-cache bash ca-certificates curl git jq
 
 RUN wget https://github.com/fopina/confgen/releases/download/v0.1.0/confgen_linux_amd64 -O /usr/bin/confgen
 RUN chmod +x /usr/bin/confgen

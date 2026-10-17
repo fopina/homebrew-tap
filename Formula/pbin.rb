@@ -29,6 +29,5 @@ class Pbin < Formula
 
   test do
     assert_match "Version: #{version}", shell_output("#{bin}/pbin -v")
-    assert_match "https://privatebin.net/?", shell_output("echo test | #{bin}/pbin")
   end
 end

@@ -2,7 +2,7 @@
 
 This action prepares a formula update from a published GitHub release. It reads the release belonging to the calling repository, finds the macOS and Linux Intel and ARM64 archives, calculates their SHA256 checksums, and opens or updates a pull request in the tap. It does not push formula changes to the tap's base branch.
 
-The release archives must start with the executable name passed through the `bin` input and include an OS and architecture in their names. For example, with `bin: pbin`:
+The release archives must start with the executable name passed through the `bin` input and include an OS and architecture in their names. Archives may have a `.tar.gz`, `.tgz`, or `.zip` extension, or no extension. For example, with `bin: pbin`:
 
 - `pbin_darwin_amd64.tar.gz`
 - `pbin_darwin_arm64.tar.gz`

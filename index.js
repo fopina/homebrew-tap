@@ -51,7 +51,7 @@ function findAsset(assets, bin, platform, architecture, label) {
   const matches = assets.filter(({ name }) => {
     const normalized = name.toLowerCase();
     return normalized.startsWith(prefix) && platform.test(normalized) && architecture.test(normalized) &&
-      /\.(tar\.gz|tgz|zip)$/.test(normalized);
+      /(\.(tar\.gz|tgz|zip))?$/.test(normalized);
   });
   if (matches.length !== 1) {
     const candidates = matches.map(({ name }) => `  ${name}`).join('\n') || '  (none)';

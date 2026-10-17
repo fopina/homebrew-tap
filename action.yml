@@ -1,5 +1,5 @@
 name: 'Bump Formula'
-description: 'Update formula in your own homebrew tap (commit directly to main branch'
+description: 'Update a formula from the assets in a GitHub release'
 inputs:
   tap_repo:
     description: 'Github repository of the homebrew tap (org/repo)'
@@ -10,48 +10,38 @@ inputs:
     required: false
     default: main
   token:
-    description: 'Personal token that allows commits to tap-repo'
+    description: 'Token with write access to the tap repository'
     required: true
-    default: ''
+  version:
+    description: 'Release tag, for example v1.2.3'
+    required: true
   formula_class:
-    description: Class name of the formula (usually filename in CamelCase)
-    required: true
-    default: ''
-  formula_file:
-    description: Filename of the formula without extension ("my-formula" means Formula/my-formula.rb)
-    required: true
-    default: ''
-  description:
-    description: Formula property - description
-    required: true
-    default: ''
-  homepage:
-    description: Formula property - homepage (defaults to github repository)
+    description: 'Formula class name'
     required: false
-    default: ''
-  url:
-    description: Formula property - url
-    required: true
+    default: Pbin
+  formula_file:
+    description: 'Formula filename without the .rb extension'
+    required: false
+    default: pbin
+  description:
+    description: 'Formula description'
+    required: false
+    default: 'CLI for PrivateBin allowing easy pasting from the Terminal'
+  homepage:
+    description: 'Formula homepage (defaults to the invoking GitHub repository)'
+    required: false
     default: ''
   license:
-    description: Formula property - license
+    description: 'Formula license'
     required: false
-    default: ''
-  version:
-    description: Formula property - version
-    required: true
-    default: ''
+    default: MIT
   bin:
-    description: Executable file name installed (in the install section)
-    required: true
-    default: ''
-  release:
-    description: Local tarball/artifact to calculate checksum
-    required: true
-    default: ''
+    description: 'Executable name and release asset prefix'
+    required: false
+    default: pbin
 outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  assets:
+    description: 'JSON map of the matched release assets'
 runs:
   using: 'docker'
   image: 'Dockerfile'

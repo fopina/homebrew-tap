@@ -42,7 +42,7 @@ The `version` is the only release value the caller needs to provide. The token i
 
 Create a fine-grained personal access token for the action:
 
-1. In GitHub, open **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**.
+1. Open [GitHub personal access tokens](https://github.com/settings/personal-access-tokens), then choose **Fine-grained tokens → Generate new token**.
 2. Set **Resource owner** to `fopina`.
 3. Under **Repository access**, choose **Only select repositories** and select `homebrew-tap`.
 4. Under **Repository permissions**, set **Contents** to **Read and write**. Leave all other permissions at **No access**; GitHub grants **Metadata: Read-only** automatically.

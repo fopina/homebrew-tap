@@ -4,23 +4,23 @@ class Pbin < Formula
   license "MIT"
 
   if OS.mac? && Hardware::CPU.intel?
-    url "https://github.com/fopina/privatebin/releases/download/v1.0.6/pbin_darwin_amd64.tar.gz"
-    sha256 "26f30cb12e80e34e22069bf53f8e674c5070b77817b993628218c583681913a1"
+    url "https://github.com/fopina/privatebin/releases/download/v1.1.0/pbin_darwin_amd64.tar.gz"
+    sha256 "dc770d277e0ad5511c405559aaee852251788738e3d932d600ab642c4df89c1a"
   end
 
   if OS.mac? && Hardware::CPU.arm?
-    url "https://github.com/fopina/privatebin/releases/download/v1.0.6/pbin_darwin_arm64.tar.gz"
-    sha256 "49d867650c794778d7284891ee77dee5a26e02a20e4e803c9a0d98a59fba221d"
+    url "https://github.com/fopina/privatebin/releases/download/v1.1.0/pbin_darwin_arm64.tar.gz"
+    sha256 "1b4311c356c33f429e8360e8f2a8e5b16ccce7fb84e388fce4d59a8440b66664"
   end
 
   if OS.linux? && Hardware::CPU.intel?
-    url "https://github.com/fopina/privatebin/releases/download/v1.0.6/pbin_linux_amd64.tar.gz"
-    sha256 "bf4ca090869574457ce950890e63588903ca8e8e975970a56fd4c83508e8b96e"
+    url "https://github.com/fopina/privatebin/releases/download/v1.1.0/pbin_linux_amd64.tar.gz"
+    sha256 "c871e1650f58b04f4e6a13ac274af21ed42cc898feb825b35a24dc31f2fb0115"
   end
 
   if OS.linux? && Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-    url "https://github.com/fopina/privatebin/releases/download/v1.0.6/pbin_linux_arm64.tar.gz"
-    sha256 "5955f172206af54dd550160164a469daa6b9d9dfd79f0b7f00d95ede72084a31"
+    url "https://github.com/fopina/privatebin/releases/download/v1.1.0/pbin_linux_arm64.tar.gz"
+    sha256 "454a9c85d470b3cc16eabd37c9451e0dc7c2e47b72963d20c61fc460cac1d308"
   end
 
   def install

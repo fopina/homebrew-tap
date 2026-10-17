@@ -17,16 +17,13 @@ inputs:
     required: true
   formula_class:
     description: 'Formula class name'
-    required: false
-    default: Pbin
+    required: true
   formula_file:
     description: 'Formula filename without the .rb extension'
-    required: false
-    default: pbin
+    required: true
   description:
     description: 'Formula description'
-    required: false
-    default: 'CLI for PrivateBin allowing easy pasting from the Terminal'
+    required: true
   homepage:
     description: 'Formula homepage (defaults to the invoking GitHub repository)'
     required: false
@@ -36,9 +33,8 @@ inputs:
     required: false
     default: MIT
   bin:
-    description: 'Executable name and release asset prefix'
-    required: false
-    default: pbin
+    description: 'Installed executable name and release asset prefix'
+    required: true
   test:
     description: 'Optional Ruby body for the Homebrew test do block (defaults to an executable check)'
     required: false

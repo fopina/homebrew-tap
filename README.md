@@ -2,7 +2,7 @@
 
 This action prepares a formula update from a published GitHub release. It reads the release belonging to the calling repository, finds the macOS and Linux Intel and ARM64 archives, calculates their SHA256 checksums, and opens or updates a pull request in the tap. It does not push formula changes to the tap's base branch.
 
-The release archives must start with the executable name (default: `pbin`) and include an OS and architecture in their names. For example:
+The release archives must start with the executable name passed through the `bin` input and include an OS and architecture in their names. For example, with `bin: pbin`:
 
 - `pbin_darwin_amd64.tar.gz`
 - `pbin_darwin_arm64.tar.gz`
@@ -25,6 +25,10 @@ If a workflow starts from a tag push and then builds and publishes the release, 
   with:
     version: ${{ github.ref_name }}
     token: ${{ secrets.TAP_TOKEN }}
+    formula_class: Pbin
+    formula_file: pbin
+    description: CLI for PrivateBin allowing easy pasting from the Terminal
+    bin: pbin
 ```
 
 ### Creating a release triggers the workflow
@@ -37,11 +41,15 @@ If you create or publish a release manually and that event starts the workflow t
   with:
     version: ${{ github.event.release.tag_name }}
     token: ${{ secrets.TAP_TOKEN }}
+    formula_class: Pbin
+    formula_file: pbin
+    description: CLI for PrivateBin allowing easy pasting from the Terminal
+    bin: pbin
 ```
 
 For either flow, if the upload happens in a separate job, put the bump action in a job that `needs` the upload job. This ordering prevents the action from querying the release before its archives exist.
 
-The `version` is the only release value the caller needs to provide. The token is required to push the formula branch and create or update the pull request in the separate tap repository. The action uses a version-specific branch such as `bump-pbin-1.2.3`; rerunning the same release updates its open pull request. The pull request URL is available as the `pull_request` action output.
+The `version` is the only release-specific value the caller needs to provide. The formula class, filename, description, and executable name are required inputs so the action does not assume a particular project. The token is required to push the formula branch and create or update the pull request in the separate tap repository. The action uses a version-specific branch such as `bump-pbin-1.2.3`; rerunning the same release updates its open pull request. The pull request URL is available as the `pull_request` action output.
 
 ## Create the token
 
@@ -56,7 +64,7 @@ Create a fine-grained personal access token for the action:
 
 The workflow passes that secret as the action's `token` input. The source repository's `GITHUB_TOKEN` cannot write to the separate tap repository. Do not put the token directly in the workflow file.
 
-Defaults target `fopina/homebrew-tap` on `main`, updating `Formula/pbin.rb`. The formula class, filename, description, homepage, license, executable name, tap repository, and tap branch can be customized through the action inputs.
+The default target is `fopina/homebrew-tap` on `main`. The formula class, filename, description, and executable name must be provided; homepage, license, tap repository, and tap branch can be customized through the optional action inputs.
 
 The formula's `test do` block defaults to a generic check that the installed executable exists and is executable. To provide formula-specific Ruby test code, pass a multiline `test` input containing the body of the block. For example, `pbin` can check the reported release version:
 
@@ -66,6 +74,10 @@ The formula's `test do` block defaults to a generic check that the installed exe
   with:
     version: ${{ github.event.release.tag_name }}
     token: ${{ secrets.TAP_TOKEN }}
+    formula_class: Pbin
+    formula_file: pbin
+    description: CLI for PrivateBin allowing easy pasting from the Terminal
+    bin: pbin
     test: |
       assert_match "Version: #{version}", shell_output("#{bin}/pbin -v")
 ```

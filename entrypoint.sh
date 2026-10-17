@@ -7,6 +7,11 @@ if [[ ! "${INPUT_VERSION}" =~ ^v?[0-9][0-9A-Za-z.+_-]*$ ]]; then
   exit 1
 fi
 
+if [[ ! "${INPUT_FORMULA_FILE}" =~ ^[A-Za-z0-9._-]+$ ]]; then
+  echo "formula_file may contain only letters, numbers, dots, underscores, and hyphens" >&2
+  exit 1
+fi
+
 if [[ ! "${GITHUB_REPOSITORY:-}" =~ ^[^/]+/[^/]+$ ]]; then
   echo "GITHUB_REPOSITORY is missing or invalid; invoke this action from a GitHub repository" >&2
   exit 1
@@ -110,9 +115,50 @@ git add "Formula/${INPUT_FORMULA_FILE}.rb"
 
 if git diff --cached --quiet; then
   echo "Formula ${INPUT_FORMULA_FILE} is already up to date for ${formula_version}."
+  pull_request_url=""
 else
   git commit -m "${INPUT_FORMULA_FILE} ${formula_version}"
-  git -c "http.extraheader=${auth_header}" push origin "HEAD:${INPUT_TAP_BRANCH}"
+
+  pull_branch="bump-${INPUT_FORMULA_FILE}-${formula_version}"
+  git -c "http.extraheader=${auth_header}" push --force origin "HEAD:${pull_branch}"
+
+  tap_owner="${INPUT_TAP_REPO%%/*}"
+  api_headers=(
+    --header 'Accept: application/vnd.github+json'
+    --header 'X-GitHub-Api-Version: 2022-11-28'
+    --header "Authorization: Bearer ${INPUT_TOKEN}"
+    --header 'User-Agent: homebrew-tap-bump-action'
+  )
+  pull_list="${work_dir}/pulls.json"
+  curl --fail --silent --show-error --location --get \
+    "${api_headers[@]}" \
+    --data-urlencode "state=open" \
+    --data-urlencode "head=${tap_owner}:${pull_branch}" \
+    --data-urlencode "base=${INPUT_TAP_BRANCH}" \
+    "https://api.github.com/repos/${INPUT_TAP_REPO}/pulls" \
+    --output "${pull_list}"
+
+  pull_request_url="$(jq -r '.[0].html_url // empty' "${pull_list}")"
+  if [[ -n "${pull_request_url}" ]]; then
+    echo "Updated existing pull request: ${pull_request_url}"
+  else
+    pull_request_payload="$(jq -cn \
+      --arg title "${INPUT_FORMULA_FILE} ${formula_version}" \
+      --arg body "Automated Homebrew formula update for ${GITHUB_REPOSITORY} release ${release_tag}." \
+      --arg head "${pull_branch}" \
+      --arg base "${INPUT_TAP_BRANCH}" \
+      '{title:$title,body:$body,head:$head,base:$base}')"
+    pull_response="${work_dir}/pull.json"
+    curl --fail --silent --show-error --location \
+      --request POST \
+      "${api_headers[@]}" \
+      --header 'Content-Type: application/json' \
+      --data "${pull_request_payload}" \
+      "https://api.github.com/repos/${INPUT_TAP_REPO}/pulls" \
+      --output "${pull_response}"
+    pull_request_url="$(jq -er '.html_url' "${pull_response}")"
+    echo "Created pull request: ${pull_request_url}"
+  fi
 fi
 
 if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
@@ -123,4 +169,5 @@ if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
     --arg linux_arm64 "$(jq -r '.name' <<<"${linux_arm64}")" \
     '{macos_amd64:$macos_amd64,macos_arm64:$macos_arm64,linux_amd64:$linux_amd64,linux_arm64:$linux_arm64}' \
     | sed 's/^/assets=/' >> "${GITHUB_OUTPUT}"
+  echo "pull_request=${pull_request_url}" >> "${GITHUB_OUTPUT}"
 fi

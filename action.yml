@@ -1,5 +1,5 @@
 name: 'Bump Formula'
-description: 'Update a formula from the assets in a GitHub release'
+description: 'Open or update a pull request for a formula using GitHub release assets'
 inputs:
   tap_repo:
     description: 'Github repository of the homebrew tap (org/repo)'
@@ -10,7 +10,7 @@ inputs:
     required: false
     default: main
   token:
-    description: 'Token with write access to the tap repository'
+    description: 'Token with contents and pull requests write access to the tap repository'
     required: true
   version:
     description: 'Release tag, for example v1.2.3'
@@ -42,6 +42,8 @@ inputs:
 outputs:
   assets:
     description: 'JSON map of the matched release assets'
+  pull_request:
+    description: 'URL of the created or updated pull request'
 runs:
   using: 'docker'
   image: 'Dockerfile'

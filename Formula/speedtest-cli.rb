@@ -24,7 +24,8 @@ class SpeedtestCli < Formula
   end
 
   def install
-    bin.install "speedtest-cli"
+    binary = Dir["speedtest-cli_*"].first
+    bin.install binary => "speedtest-cli"
   end
 
   test do
